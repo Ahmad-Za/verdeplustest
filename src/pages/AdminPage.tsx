@@ -36,7 +36,13 @@ function inputClass(gas: keyof Reading, val: string) {
 export default function AdminPage() {
     const [readings, setReadings] = useState<Reading[]>(emptyReadings);
     const [saved, setSaved] = useState(false);
+    const [toast, setToast] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
     const gridRef = useRef<HTMLTableElement>(null);
+
+    const showToast = (message: string, type: 'success' | 'error') => {
+        setToast({ message, type });
+        setTimeout(() => setToast(null), 4000);
+    };
 
     const handleChange = (row: number, gas: keyof Reading, val: string) => {
         setReadings(prev => prev.map((r, i) => i === row ? { ...r, [gas]: val } : r));
@@ -88,11 +94,21 @@ export default function AdminPage() {
 
         if (error) {
             console.error("Error saving data:", error);
-            alert("حدث خطأ أثناء الحفظ");
+            showToast("حدث خطأ أثناء الحفظ. يرجى المحاولة لاحقاً.", 'error');
             return;
         }
 
+        // Also save a snapshot to historical logs
+        const currentDate = new Date().toISOString().split('T')[0];
+        const historyPayload = payload.map(r => ({
+            ...r,
+            date: currentDate
+        }));
+
+        await supabase.from('history_logs').insert(historyPayload);
+
         setSaved(true);
+        showToast("نم حفظ البيانات بنجاح!", 'success');
         setTimeout(() => setSaved(false), 3000);
     };
 
@@ -135,8 +151,8 @@ export default function AdminPage() {
                 </div>
             )}
 
-            <div className="glass-card p-6 overflow-x-auto">
-                <table ref={gridRef} className="w-full text-sm">
+            <div className="glass-card p-0 md:p-6 overflow-x-auto w-full">
+                <table ref={gridRef} className="w-full text-sm min-w-[700px]">
                     <thead>
                         <tr className="text-vp-muted border-b border-white/5 text-right">
                             <th className="pb-3 font-medium pl-4">المنطقة</th>
@@ -179,9 +195,16 @@ export default function AdminPage() {
             <div className="flex gap-4 mt-4 text-xs text-vp-muted flex-wrap">
                 <div className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-vp-cyan/20 border border-vp-cyan/40 inline-block" /> طبيعي</div>
                 <div className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-vp-amber/20 border border-vp-amber/40 inline-block" /> كميات مرتفعة (تحذير)</div>
-                <div className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-vp-red/20   border border-vp-red/40   inline-block" /> قيمة خاطئة أو خطر</div>
+                <div className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-vp-red/20   border border-vp-red/40   inline-block" /> قيمة خاطئة أو خطر (تنبيه حرج)</div>
             </div>
+
+            {/* Custom Toast Notification */}
+            {toast && (
+                <div className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-full flex items-center gap-3 shadow-2xl border animate-fade-in-up ${toast.type === 'success' ? 'bg-black/80 border-vp-cyan/30 text-vp-cyan' : 'bg-black/80 border-vp-red/30 text-vp-red'}`}>
+                    <span className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: toast.type === 'success' ? '#6ECCDB' : '#eb5757' }}></span>
+                    <span className="font-bold text-sm text-white">{toast.message}</span>
+                </div>
+            )}
         </div>
     );
 }
-

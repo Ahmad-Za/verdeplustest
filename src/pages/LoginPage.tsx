@@ -91,11 +91,18 @@ export default function LoginPage({ onLogin }: LoginProps) {
                 </div>
 
                 {/* Premium promo card */}
-                <div className="mt-4 glass-card p-5 border-vp-cyan/20">
-                    <p className="text-xs text-vp-cyan font-semibold mb-1">{t('login.promo1')}</p>
-                    <p className="text-sm text-vp-muted leading-relaxed">
+                <div className="mt-6 glass-card p-6 border-vp-cyan/30 text-center flex flex-col items-center">
+                    <div className="w-12 h-12 rounded-full bg-vp-cyan/10 flex items-center justify-center text-vp-cyan mb-3">
+                        <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+                    </div>
+                    <p className="text-sm text-vp-cyan font-bold mb-2">{t('login.promo1')}</p>
+                    <p className="text-xs text-vp-muted leading-relaxed mb-4 max-w-xs">
                         {t('login.promo2')}
                     </p>
+                    <a href="mailto:subscribe@verde.edu" className="secondary-btn w-full text-sm py-2 flex items-center justify-center gap-2">
+                        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                        الاشتراك للباحثين
+                    </a>
                 </div>
             </div>
         </div>

@@ -364,16 +364,20 @@ export default function DashboardPage({ onNavigate }: DashboardProps) {
                         </thead>
                         <tbody className="divide-y divide-white/5">
                             {readings.map(r => {
-                                const s = getStatus('ch4', r.ch4);
+                                const overallS = getStatus('ch4', r.ch4); // mainly just for the final status badge / row border
+                                const ch4S = getStatus('ch4', r.ch4);
+                                const c3h8S = getStatus('c3h8', r.c3h8);
+                                const h2S = getStatus('h2', r.h2);
+
                                 return (
-                                    <tr key={r.id} className="hover:bg-white/[0.02] transition-colors">
-                                        <td className="py-3 font-medium">{r.region}</td>
-                                        <td className="py-3 font-mono text-cyan-200">{r.ch4.toFixed(1)}</td>
-                                        <td className="py-3 font-mono text-cyan-200">{r.c3h8.toFixed(1)}</td>
-                                        <td className="py-3 font-mono text-cyan-200">{r.h2.toFixed(1)}</td>
+                                    <tr key={r.id} className={`transition-colors border-l-4 hover:bg-white/[0.04] ${overallS === 'danger' ? 'border-vp-red bg-vp-red/5' : overallS === 'warning' ? 'border-vp-amber bg-vp-amber/5' : 'border-transparent'}`}>
+                                        <td className="py-3 px-2 font-medium">{r.region}</td>
+                                        <td className={`py-3 font-mono ${ch4S === 'danger' ? 'text-vp-red font-bold' : ch4S === 'warning' ? 'text-vp-amber font-bold' : 'text-vp-cyan'}`}>{r.ch4.toFixed(1)}</td>
+                                        <td className={`py-3 font-mono ${c3h8S === 'danger' ? 'text-vp-red font-bold' : c3h8S === 'warning' ? 'text-vp-amber font-bold' : 'text-vp-cyan'}`}>{r.c3h8.toFixed(1)}</td>
+                                        <td className={`py-3 font-mono ${h2S === 'danger' ? 'text-vp-red font-bold' : h2S === 'warning' ? 'text-vp-amber font-bold' : 'text-vp-cyan'}`}>{r.h2.toFixed(1)}</td>
                                         <td className="py-3">
-                                            <span className={`status-badge-${s === 'danger' ? 'danger' : s === 'warning' ? 'warning' : 'normal'}`}>
-                                                {s === 'normal' ? t('level.good') : s === 'warning' ? t('level.moderate') : t('level.danger')}
+                                            <span className={`status-badge-${overallS === 'danger' ? 'danger' : overallS === 'warning' ? 'warning' : 'normal'}`}>
+                                                {overallS === 'normal' ? t('level.good') : overallS === 'warning' ? t('level.moderate') : t('level.danger')}
                                             </span>
                                         </td>
                                     </tr>

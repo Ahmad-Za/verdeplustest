@@ -1,16 +1,18 @@
-import { useState } from 'react';
+import { useState, useEffect, Suspense, lazy } from 'react';
 import type { UserRole } from './data';
 import LoginPage from './pages/LoginPage';
-import DashboardPage from './pages/DashboardPage';
-import AdminPage from './pages/AdminPage';
-import SessionsPage from './pages/SessionsPage';
-import LogsPage from './pages/LogsPage';
 import Navbar from './components/Navbar';
 import LandingPage from './pages/LandingPage';
 import Footer from './components/Footer';
 import './index.css';
 
+const DashboardPage = lazy(() => import('./pages/DashboardPage'));
+const AdminPage = lazy(() => import('./pages/AdminPage'));
+const SessionsPage = lazy(() => import('./pages/SessionsPage'));
+const LogsPage = lazy(() => import('./pages/LogsPage'));
+
 export default function App() {
+  const [loading, setLoading] = useState(true);
   const [role, setRole] = useState<UserRole>(null);
   const [userName, setUserName] = useState('');
   const [page, setPage] = useState('home');
@@ -36,6 +38,28 @@ export default function App() {
     return <DashboardPage role={role} onNavigate={setPage} />;
   };
 
+  useEffect(() => {
+    // Initial loading screen
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1500); // 1.5 seconds loading
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-vp-bg flex flex-col items-center justify-center">
+        <div className="relative w-24 h-24 mb-6">
+          <div className="absolute inset-0 border-t-4 border-vp-cyan rounded-full animate-spin"></div>
+          <div className="absolute inset-2 border-r-4 border-vp-cyan/60 rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}></div>
+          <div className="absolute inset-4 border-b-4 border-vp-cyan/30 rounded-full animate-spin" style={{ animationDuration: '2s' }}></div>
+        </div>
+        <h2 className="text-vp-cyan text-xl font-bold tracking-widest animate-pulse">VERDE<span className="text-white">PLUS</span></h2>
+        <p className="text-vp-muted text-sm mt-2">جاري تهيئة النظام والمؤشرات...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen relative overflow-hidden bg-vp-bg text-white font-inter flex flex-col">
       {/* Global Mesh Grid Background */}
@@ -50,7 +74,11 @@ export default function App() {
           onLogout={handleLogout}
         />
       )}
-      <main className="z-10 relative flex-1 flex flex-col">{currentPage()}</main>
+      <main className="z-10 relative flex-1 flex flex-col">
+        <Suspense fallback={<div className="flex-1 flex items-center justify-center p-12 text-vp-cyan animate-pulse">جاري التحميل...</div>}>
+          {currentPage()}
+        </Suspense>
+      </main>
       <Footer />
     </div>
   );

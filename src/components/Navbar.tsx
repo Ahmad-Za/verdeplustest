@@ -38,7 +38,7 @@ export default function Navbar({ role, name, activePage, onNavigate, onLogout }:
                 >
                     <img src="/verdeplus cyan.png" alt="VerdePlus" className="h-16 md:h-20 object-contain drop-shadow-lg" />
                     {role === 'researcher' && (
-                        <span className="text-xs bg-vp-cyan/10 text-vp-cyan border border-vp-cyan/20 rounded-full px-2 py-0.5 mr-1 hidden sm:inline-block">Premium</span>
+                        <span className="text-xs bg-vp-cyan/10 text-vp-cyan border border-vp-cyan/20 rounded-full px-2 py-0.5 mr-1 hidden sm:inline-block whitespace-nowrap">{t('nav.researcher_role')}</span>
                     )}
                 </div>
 
@@ -96,14 +96,26 @@ export default function Navbar({ role, name, activePage, onNavigate, onLogout }:
                 </div>
             </div>
 
-            {/* Mobile Menu Dropdown */}
-            {menuOpen && (
-                <div className="md:hidden mt-4 pt-4 border-t border-white/10 flex flex-col gap-2 animate-fade-in">
+            {/* Mobile Menu Drawer Overlay */}
+            <div className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-40 transition-opacity duration-300 md:hidden ${menuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`} onClick={() => setMenuOpen(false)} />
+
+            {/* Mobile Menu Slide-out Drawer */}
+            <div className={`fixed top-0 right-0 h-full w-3/4 max-w-sm bg-vp-bg border-l border-white/10 z-50 transform transition-transform duration-300 ease-in-out flex flex-col shadow-2xl md:hidden ${menuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+                <div className="flex items-center justify-between p-6 border-b border-white/5">
+                    <img src="/logo.png" alt="VerdePlus" className="h-10 object-contain" />
+                    <button onClick={() => setMenuOpen(false)} className="p-2 text-vp-muted hover:text-white rounded-full hover:bg-white/5">
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div className="flex-1 overflow-y-auto px-4 py-6 flex flex-col gap-3">
                     {links.map(link => (
                         <button
                             key={link.id}
                             onClick={() => { onNavigate(link.id); setMenuOpen(false); }}
-                            className={`px-4 py-3 rounded-lg text-sm font-medium w-full text-start ${activePage === link.id
+                            className={`px-4 py-3 rounded-xl text-start text-base font-bold transition-all ${activePage === link.id
                                 ? 'bg-vp-cyan/10 text-vp-cyan border border-vp-cyan/20'
                                 : 'text-vp-muted hover:text-white hover:bg-white/5'
                                 }`}
@@ -111,13 +123,30 @@ export default function Navbar({ role, name, activePage, onNavigate, onLogout }:
                             {link.label}
                         </button>
                     ))}
+                </div>
+
+                <div className="p-6 border-t border-white/5 bg-black/20">
                     {!role && (
-                        <button onClick={() => { onNavigate('login'); setMenuOpen(false); }} className="neon-btn text-sm py-3 mt-2 w-full">
+                        <button onClick={() => { onNavigate('login'); setMenuOpen(false); }} className="neon-btn text-base font-bold py-3 w-full">
                             {t('nav.login')}
                         </button>
                     )}
+                    {role && (
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-vp-cyan/20 flex items-center justify-center text-vp-cyan font-bold border border-vp-cyan/30">
+                                {name?.charAt(0) || 'U'}
+                            </div>
+                            <div className="flex-1">
+                                <p className="text-sm font-bold text-white leading-tight">{name}</p>
+                                <p className="text-xs text-vp-muted capitalize">{role === 'admin' ? t('nav.admin_role') : t('nav.researcher_role')}</p>
+                            </div>
+                            <button onClick={onLogout} className="p-2 text-vp-red hover:bg-vp-red/10 rounded-lg transition-colors" title={t('nav.logout')}>
+                                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+                            </button>
+                        </div>
+                    )}
                 </div>
-            )}
+            </div>
         </nav>
     );
 }
