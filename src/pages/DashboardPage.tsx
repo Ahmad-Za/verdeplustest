@@ -1,16 +1,8 @@
 import { useState, useMemo, useEffect } from 'react';
-import { type UserRole, MOCK_READINGS, SESSION_CARDS, getStatus, overallAQI, REGIONS } from '../data';
+import { type UserRole, MOCK_READINGS, getStatus, overallAQI, REGIONS } from '../data';
 import { Sparkline } from '../components/Sparkline';
 import { useI18n } from '../i18n';
 import { supabase } from '../supabase';
-
-const getRegionPosition = (id: number) => {
-    // Generate scattered coordinates between 10% and 85%
-    const seed = id * 12345.6789;
-    const x = 10 + ((seed % 100) / 100) * 75;
-    const y = 10 + (((seed * 7) % 100) / 100) * 75;
-    return { top: `${y}%`, left: `${x}%` };
-};
 
 interface DashboardProps {
     role?: UserRole;
@@ -93,14 +85,10 @@ export default function DashboardPage({ onNavigate }: DashboardProps) {
         { key: 'h2', label: 'هيدروجين (H₂)', unit: 'ppm', val: avgGas.h2, tooltip: t('tooltip.h2') },
     ];
 
-    const [activeTag, setActiveTag] = useState<string | null>(null);
-    const tags = ['كل الجلسات', 'طاقة متجددة', 'هندسة عمارة', 'انبعاثات'];
-    const filteredSessions = activeTag && activeTag !== 'كل الجلسات'
-        ? SESSION_CARDS.filter(s => s.tag === activeTag)
-        : SESSION_CARDS;
+    // Map and Sessions were moved to their respective pages.
 
     return (
-        <div className="p-6 max-w-7xl mx-auto animate-fade-in">
+        <div className="p-3 md:p-6 max-w-7xl mx-auto animate-fade-in w-full max-w-[100vw] overflow-hidden">
             <h2 className="text-2xl font-bold mb-6">{t('insights.title')}</h2>
 
             {/* Bento Grid */}
@@ -228,104 +216,7 @@ export default function DashboardPage({ onNavigate }: DashboardProps) {
 
             </div>
 
-            {/* Interactive Campus Map (Lightweight) */}
-            <div className="glass-card mb-8 p-6 transition-transform hover:-translate-y-1 duration-300">
-                <div className="flex items-center gap-2 mb-4">
-                    <span className="w-1.5 h-4 bg-blue-500 rounded-full"></span>
-                    <h3 className="text-lg font-bold">الخريطة التفاعلية للحرم الجامعي</h3>
-                </div>
-                <div className="relative w-full h-[500px] bg-[#090F21] rounded-xl border border-white/5 overflow-hidden inset-shadow group/map">
-                    {/* Detailed Blueprint Campus Map SVG */}
-                    <svg className="absolute inset-0 w-full h-full opacity-30 mt-4 md:mt-0 transition-opacity duration-500 group-hover/map:opacity-50" preserveAspectRatio="xMidYMid slice" viewBox="0 0 1000 600" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#6ECCDB" strokeWidth="0.5" strokeOpacity="0.2" />
-                            </pattern>
-                        </defs>
-
-                        <rect width="100%" height="100%" fill="url(#grid)" />
-
-                        {/* Campus external bounds */}
-                        <path d="M 80 80 L 850 120 L 920 520 L 150 480 Z" fill="#6ECCDB" opacity="0.05" stroke="#6ECCDB" strokeWidth="2" strokeOpacity="0.4" strokeDasharray="10,5" />
-
-                        {/* Main roads */}
-                        <path d="M -50 250 Q 500 200 1050 300" fill="none" stroke="#6ECCDB" strokeWidth="30" strokeOpacity="0.1" />
-                        <path d="M -50 250 Q 500 200 1050 300" fill="none" stroke="#6ECCDB" strokeWidth="2" strokeOpacity="0.3" strokeDasharray="15,10" />
-                        <path d="M 400 -50 Q 550 300 350 650" fill="none" stroke="#6ECCDB" strokeWidth="20" strokeOpacity="0.1" />
-                        <path d="M 400 -50 Q 550 300 350 650" fill="none" stroke="#6ECCDB" strokeWidth="1" strokeOpacity="0.3" strokeDasharray="5,5" />
-
-                        {/* Building Blocks */}
-                        <g fill="#6ECCDB" stroke="#6ECCDB" strokeWidth="1.5">
-                            {/* Main Library */}
-                            <path d="M 250 150 L 350 140 L 360 220 L 260 230 Z" fillOpacity="0.15" strokeOpacity="0.6" />
-                            <rect x="270" y="160" width="80" height="60" fill="none" strokeOpacity="0.8" />
-
-                            {/* IT Faculty */}
-                            <polygon points="450,110 580,100 600,200 520,220 440,180" fillOpacity="0.1" strokeOpacity="0.7" />
-                            <rect x="470" y="130" width="100" height="40" transform="rotate(-5 470 130)" fill="none" strokeOpacity="0.9" />
-
-                            {/* Engineering Faculty */}
-                            <path d="M 650 180 L 800 200 L 780 320 L 630 300 Z" fillOpacity="0.12" strokeOpacity="0.6" />
-
-                            {/* Circular / Dome structure */}
-                            <circle cx="700" cy="420" r="60" fillOpacity="0.08" strokeOpacity="0.6" />
-                            <circle cx="700" cy="420" r="40" fill="none" strokeOpacity="0.4" />
-                            <circle cx="700" cy="420" r="20" fill="none" strokeOpacity="0.2" />
-
-                            {/* Science lab block */}
-                            <path d="M 200 350 L 320 370 L 300 480 L 180 460 Z" fillOpacity="0.1" strokeOpacity="0.5" />
-
-                            {/* Administrative Building */}
-                            <rect x="420" y="380" width="150" height="120" rx="8" fillOpacity="0.15" strokeOpacity="0.6" />
-                            <rect x="440" y="400" width="110" height="80" rx="4" fill="none" strokeOpacity="0.5" />
-
-                            {/* Smaller ancillary buildings */}
-                            <rect x="120" y="280" width="50" height="40" fillOpacity="0.1" strokeOpacity="0.4" />
-                            <rect x="850" y="360" width="40" height="70" fillOpacity="0.1" strokeOpacity="0.4" />
-                            <rect x="580" y="250" width="30" height="30" fillOpacity="0.1" strokeOpacity="0.4" />
-                        </g>
-
-                        {/* Decoration Trees/Parks */}
-                        <g fill="none" stroke="#6ECCDB" strokeWidth="1" strokeOpacity="0.3">
-                            <circle cx="150" cy="200" r="15" />
-                            <circle cx="170" cy="180" r="10" />
-                            <circle cx="400" cy="140" r="12" />
-                            <circle cx="600" cy="130" r="18" />
-                            <circle cx="820" cy="450" r="20" />
-                            <circle cx="800" cy="480" r="15" />
-                            <circle cx="350" cy="450" r="18" />
-                        </g>
-                    </svg>
-
-                    {readings.map(r => {
-                        const s = getStatus('ch4', r.ch4);
-                        const pos = getRegionPosition(r.id);
-                        const bg = s === 'danger' ? 'bg-vp-red' : s === 'warning' ? 'bg-vp-amber' : 'bg-vp-cyan';
-                        return (
-                            <div key={r.id} className="absolute group z-10" style={pos}>
-                                {/* Pulse animation */}
-                                <span className={`absolute -inset-1 rounded-full animate-ping opacity-75 ${bg}`}></span>
-                                {/* Dot */}
-                                <div className={`relative w-4 h-4 border-2 border-[#0B132B] rounded-full cursor-pointer shadow-lg ${bg}`}></div>
-
-                                {/* Tooltip */}
-                                <div className="absolute bottom-full mb-2 min-w-[12rem] px-3 py-2 bg-[#111A33]/95 border border-white/10 rounded-lg text-xs opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-20 shadow-xl backdrop-blur-sm"
-                                    style={lang === 'ar' ? { right: '50%', transform: 'translateX(50%)' } : { left: '50%', transform: 'translateX(-50%)' }}>
-                                    <p className="font-bold text-white mb-1 whitespace-nowrap">{r.region}</p>
-                                    <div className="flex justify-between items-center mb-1">
-                                        <span className="text-vp-muted">AQI</span>
-                                        <span className={`font-mono font-bold ${s === 'danger' ? 'text-vp-red' : s === 'warning' ? 'text-vp-amber' : 'text-vp-cyan'}`}>{(r.ch4 + r.c3h8 + r.h2).toFixed(1)}</span>
-                                    </div>
-                                    <div className="flex justify-between items-center">
-                                        <span className="text-vp-muted">CH₄</span>
-                                        <span className="font-mono text-white">{r.ch4} <span className="text-[10px] text-vp-muted">ppm</span></span>
-                                    </div>
-                                </div>
-                            </div>
-                        );
-                    })}
-                </div>
-            </div>
+            {/* Interactive Campus Map moved to MapPage.tsx */}
 
             {/* Historical Dashboard navigation */}
             <div
@@ -388,49 +279,7 @@ export default function DashboardPage({ onNavigate }: DashboardProps) {
                 </div>
             </div>
 
-            {/* Session Cards */}
-            <div>
-                <div className="flex items-center justify-between mb-5 flex-wrap gap-3">
-                    <div className="flex items-center gap-2">
-                        <span className="w-1.5 h-4 bg-blue-500 rounded-full"></span>
-                        <p className="text-lg font-semibold">{t('insights.sessions')}</p>
-                    </div>
-                    <div className="flex gap-2 flex-wrap">
-                        {tags.map(t => (
-                            <button
-                                key={t}
-                                onClick={() => setActiveTag(t === 'كل الجلسات' ? null : t)}
-                                className={`tag-btn ${(activeTag === t || (t === 'كل الجلسات' && !activeTag)) ? 'active' : ''}`}
-                            >
-                                {t}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                    {filteredSessions.map(s => (
-                        <div key={s.id} className="glass-card p-5 flex flex-col gap-3 transition-transform hover:-translate-y-2 hover:shadow-glow-green duration-300">
-                            <div className="flex items-center justify-between">
-                                <span className="tag-btn active text-xs">{s.tag}</span>
-                                <span className="text-vp-muted text-xs bg-white/5 px-2 py-1 rounded-md">{s.date}</span>
-                            </div>
-                            <h3 className="font-semibold text-sm leading-snug">{s.title}</h3>
-                            <div className="space-y-1.5 mt-1">
-                                {s.tldr.map((t, i) => (
-                                    <p key={i} className="text-xs text-vp-muted flex gap-2 items-start">
-                                        <span className="text-vp-cyan mt-0.5 inline-block w-1.5 h-1.5 rounded-full bg-vp-cyan shrink-0 relative top-1"></span>
-                                        {t}
-                                    </p>
-                                ))}
-                            </div>
-                            <div className="mt-auto border-t border-white/5 pt-3 flex items-center gap-2 text-xs text-vp-muted/80">
-                                <span className="w-4 h-4 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold">م</span>
-                                {s.dept}
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
+            {/* Session Cards moved to SessionsPage.tsx */}
         </div>
     );
 }

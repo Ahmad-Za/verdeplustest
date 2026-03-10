@@ -10,23 +10,50 @@ const DashboardPage = lazy(() => import('./pages/DashboardPage'));
 const AdminPage = lazy(() => import('./pages/AdminPage'));
 const SessionsPage = lazy(() => import('./pages/SessionsPage'));
 const LogsPage = lazy(() => import('./pages/LogsPage'));
+const MapPage = lazy(() => import('./pages/MapPage'));
 
 export default function App() {
   const [loading, setLoading] = useState(true);
-  const [role, setRole] = useState<UserRole>(null);
-  const [userName, setUserName] = useState('');
-  const [page, setPage] = useState('home');
+  const [role, setRole] = useState<UserRole>(() => {
+    const saved = localStorage.getItem('role');
+    return saved ? (saved as UserRole) : null;
+  });
+  const [userName, setUserName] = useState(() => localStorage.getItem('username') || '');
+  const [page, setPageState] = useState(() => {
+    const hash = window.location.hash.slice(1);
+    const validPages = ['home', 'login', 'admin', 'sessions', 'logs', 'map', 'insights', 'dashboard'];
+    return validPages.includes(hash) ? hash : 'home';
+  });
+
+  const setPage = (newPage: string) => {
+    window.location.hash = newPage;
+    setPageState(newPage);
+  };
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.slice(1);
+      const validPages = ['home', 'login', 'admin', 'sessions', 'logs', 'map', 'insights', 'dashboard'];
+      if (validPages.includes(hash)) setPageState(hash);
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
 
   const handleLogin = (r: UserRole, name: string) => {
     setRole(r);
     setUserName(name);
+    if (r) localStorage.setItem('role', r);
+    localStorage.setItem('username', name);
     setPage('insights');
   };
 
   const handleLogout = () => {
     setRole(null);
     setUserName('');
-    setPage('insights');
+    localStorage.removeItem('role');
+    localStorage.removeItem('username');
+    setPage('home');
   };
 
   const currentPage = () => {
@@ -35,6 +62,7 @@ export default function App() {
     if (page === 'admin' && role === 'admin') return <AdminPage />;
     if (page === 'sessions') return <SessionsPage />;
     if (page === 'logs') return <LogsPage role={role} />;
+    if (page === 'map') return <MapPage />;
     return <DashboardPage role={role} onNavigate={setPage} />;
   };
 

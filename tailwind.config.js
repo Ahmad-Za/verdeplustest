@@ -16,8 +16,8 @@ export default {
         'vp-muted': '#A0AABF',
       },
       fontFamily: {
-        inter: ['Inter', 'system-ui', 'sans-serif'],
-        cairo: ['Cairo', 'system-ui', 'sans-serif'],
+        inter: ['"Inter"', 'system-ui', 'sans-serif'],
+        cairo: ['"Cairo"', 'system-ui', 'sans-serif'],
       },
       backdropBlur: {
         glass: '20px',

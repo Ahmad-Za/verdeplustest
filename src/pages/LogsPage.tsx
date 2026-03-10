@@ -88,7 +88,7 @@ export default function LogsPage({ role }: LogsProps) {
     };
 
     return (
-        <div className="p-6 max-w-7xl mx-auto pb-24 relative animate-fade-in">
+        <div className="p-3 md:p-6 max-w-7xl mx-auto pb-24 relative animate-fade-in w-full max-w-[100vw] overflow-hidden">
             <h2 className="text-2xl font-bold mb-2">{t('logs.title')}</h2>
             <p className="text-vp-muted mb-8">{t('logs.desc')}</p>
 
@@ -113,27 +113,27 @@ export default function LogsPage({ role }: LogsProps) {
             <div className={role !== 'admin' && role !== 'researcher' ? "opacity-40 pointer-events-none select-none filter blur-[4px]" : ""}>
 
                 {/* Historical Tables with Pagination */}
-                <div className="glass-card p-6 mb-8 mt-2">
+                <div className="glass-card p-4 md:p-6 mb-8 mt-2 overflow-hidden w-full">
                     <div className="flex items-center justify-between mb-6 border-b border-white/5 pb-4 flex-wrap gap-4">
                         <h3 className="text-xl font-bold flex items-center gap-2">
                             <span className="w-1.5 h-4 bg-purple-500 rounded-full"></span>
                             الجداول اليومية التاريخية
                         </h3>
-                        <div className="flex items-center gap-4 bg-black/30 rounded-lg p-1 border border-white/5">
+                        <div className="flex items-center gap-4 bg-black/30 rounded-lg p-1 border border-white/5 w-full sm:w-auto justify-between sm:justify-start">
                             <button
                                 onClick={lang === 'ar' ? handleNext : handlePrev}
                                 disabled={lang === 'ar' ? currentDateIndex === 0 : currentDateIndex === availableDates.length - 1}
-                                className="p-2 hover:bg-white/10 rounded-md transition-colors disabled:opacity-30"
+                                className="p-2 hover:bg-white/10 rounded-md transition-colors disabled:opacity-30 flex-shrink-0"
                             >
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
                             </button>
-                            <span className="font-mono text-vp-cyan font-bold min-w-[100px] text-center">
+                            <span className="font-mono text-vp-cyan font-bold min-w-[100px] text-center text-sm md:text-base">
                                 {availableDates[currentDateIndex] || 'لا توجد بيانات'}
                             </span>
                             <button
                                 onClick={lang === 'ar' ? handlePrev : handleNext}
                                 disabled={lang === 'ar' ? currentDateIndex === availableDates.length - 1 : currentDateIndex === 0}
-                                className="p-2 hover:bg-white/10 rounded-md transition-colors disabled:opacity-30"
+                                className="p-2 hover:bg-white/10 rounded-md transition-colors disabled:opacity-30 flex-shrink-0"
                             >
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
                             </button>
@@ -143,15 +143,15 @@ export default function LogsPage({ role }: LogsProps) {
                     {loading ? (
                         <div className="p-12 text-center text-vp-cyan animate-pulse">جارٍ جلب السجلات...</div>
                     ) : (
-                        <div className="flex flex-col gap-4 mt-4">
-                            <div className="overflow-x-auto">
-                                <table className="w-full text-sm">
-                                    <thead className={lang === 'en' ? 'text-left' : 'text-right'}>
-                                        <tr className="text-vp-muted border-b border-white/5">
-                                            <th className="pb-3 font-medium">{t('insights.region')}</th>
-                                            <th className="pb-3 font-medium">CH₄ (ppm)</th>
-                                            <th className="pb-3 font-medium">C₃H₈ (ppm)</th>
-                                            <th className="pb-3 font-medium">H₂ (ppm)</th>
+                        <div className="flex flex-col gap-4 mt-4 w-full max-w-full">
+                            <div className="overflow-x-auto rounded-lg border border-white/5 bg-black/20 w-full pb-2 block max-w-full">
+                                <table className="w-full text-xs md:text-sm whitespace-nowrap min-w-[500px]">
+                                    <thead className={`bg-black/30 ${lang === 'en' ? 'text-left' : 'text-right'}`}>
+                                        <tr className="text-vp-muted border-b border-white/10">
+                                            <th className="py-4 px-3 font-medium">{t('insights.region')}</th>
+                                            <th className="py-4 px-3 font-medium">CH₄ <span className="text-[10px] text-vp-muted">(ppm)</span></th>
+                                            <th className="py-4 px-3 font-medium">C₃H₈ <span className="text-[10px] text-vp-muted">(ppm)</span></th>
+                                            <th className="py-4 px-3 font-medium">H₂ <span className="text-[10px] text-vp-muted">(ppm)</span></th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-white/5">
@@ -163,10 +163,10 @@ export default function LogsPage({ role }: LogsProps) {
 
                                             return (
                                                 <tr key={i} className={`transition-colors border-l-4 border-transparent hover:bg-white/[0.04]`}>
-                                                    <td className="py-3 px-2 font-medium bg-black/10">{r.region}</td>
-                                                    <td className={`py-3 font-mono ${ch4S === 'danger' ? 'text-vp-red font-bold' : ch4S === 'warning' ? 'text-vp-amber font-bold' : 'text-vp-cyan'}`}>{typeof r.ch4 === 'number' ? r.ch4.toFixed(1) : parseFloat(r.ch4).toFixed(1)}</td>
-                                                    <td className={`py-3 font-mono ${c3h8S === 'danger' ? 'text-vp-red font-bold' : c3h8S === 'warning' ? 'text-vp-amber font-bold' : 'text-vp-cyan'}`}>{typeof r.c3h8 === 'number' ? r.c3h8.toFixed(1) : parseFloat(r.c3h8).toFixed(1)}</td>
-                                                    <td className={`py-3 font-mono ${h2S === 'danger' ? 'text-vp-red font-bold' : h2S === 'warning' ? 'text-vp-amber font-bold' : 'text-vp-cyan'}`}>{typeof r.h2 === 'number' ? r.h2.toFixed(1) : parseFloat(r.h2).toFixed(1)}</td>
+                                                    <td className="py-4 px-3 font-bold bg-black/10 border-r border-white/5 truncate max-w-[120px] md:max-w-none" title={r.region}>{r.region}</td>
+                                                    <td className={`py-4 px-3 text-center font-mono ${ch4S === 'danger' ? 'text-vp-red font-bold' : ch4S === 'warning' ? 'text-vp-amber font-bold' : 'text-vp-cyan'}`}>{typeof r.ch4 === 'number' ? r.ch4.toFixed(1) : parseFloat(r.ch4).toFixed(1)}</td>
+                                                    <td className={`py-4 px-3 text-center font-mono ${c3h8S === 'danger' ? 'text-vp-red font-bold' : c3h8S === 'warning' ? 'text-vp-amber font-bold' : 'text-vp-cyan'}`}>{typeof r.c3h8 === 'number' ? r.c3h8.toFixed(1) : parseFloat(r.c3h8).toFixed(1)}</td>
+                                                    <td className={`py-4 px-3 text-center font-mono ${h2S === 'danger' ? 'text-vp-red font-bold' : h2S === 'warning' ? 'text-vp-amber font-bold' : 'text-vp-cyan'}`}>{typeof r.h2 === 'number' ? r.h2.toFixed(1) : parseFloat(r.h2).toFixed(1)}</td>
                                                 </tr>
                                             );
                                         })}
@@ -185,9 +185,10 @@ export default function LogsPage({ role }: LogsProps) {
                 </div>
 
                 {/* Infographics Chart Area: Regions Comparison */}
-                <div className="glass-card p-8 mb-8 overflow-x-auto">
-                    <h3 className="text-lg font-bold mb-6">مقارنة التلوث بين المناطق (CH₄) - {availableDates[currentDateIndex] || 'اليوم'}</h3>
-                    <div className="h-64 flex items-end justify-between gap-2 min-w-[700px]">
+                <div className="glass-card p-4 md:p-8 mb-8 overflow-hidden">
+                    <h3 className="text-base md:text-lg font-bold mb-6">مقارنة التلوث بين المناطق (CH₄) - {availableDates[currentDateIndex] || 'اليوم'}</h3>
+                    <div className="overflow-x-auto pb-4">
+                        <div className="h-64 flex items-end justify-between gap-1 md:gap-2 min-w-[500px] md:min-w-[700px] px-2">
                         {REGIONS.map((region, i) => {
                             const r = currentRecords.find(x => x.region === region) || { ch4: 0, c3h8: 0, h2: 0 };
                             // Calculate a fake "percentage" based on danger threshold for CH4 (7.0 for danger)
@@ -218,6 +219,7 @@ export default function LogsPage({ role }: LogsProps) {
                                 </div>
                             );
                         })}
+                        </div>
                     </div>
                 </div>
 

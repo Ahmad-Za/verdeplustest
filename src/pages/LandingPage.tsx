@@ -21,16 +21,16 @@ export default function LandingPage({ onNavigate }: LandingProps) {
                         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-vp-cyan/30 bg-vp-cyan/5 text-vp-cyan text-xs font-bold mb-6">
                             <span className="w-2 h-2 rounded-full bg-vp-cyan animate-ping"></span>
                             <span className="w-2 h-2 rounded-full bg-vp-cyan absolute"></span>
-                            النظام يعمل بفاعلية
+                            النظام محدث
                         </div>
 
-                        <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-tr from-white via-white to-vp-muted leading-tight">
-                            مراقبة ذكية لجودة الهواء <br />
-                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-vp-cyan to-teal-400">في الحرم الجامعي</span>
+                        <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-tr from-white via-white to-vp-muted leading-normal md:leading-snug">
+                            {t('landing.title1')} <br />
+                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-vp-cyan to-teal-400">{t('landing.title2')}</span>
                         </h1>
 
                         <p className="text-lg md:text-xl text-vp-muted/90 mb-10 max-w-xl leading-relaxed">
-                            نظام متكامل يستند إلى إنترنت الأشياء (IoT) والذكاء الاصطناعي لتتبع، تحليل، وتوقع جودة الهواء والحد من انبعاثات الغازات في البيئة الأكاديمية لحظة بلحظة.
+                            {t('landing.desc')}
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
@@ -45,45 +45,45 @@ export default function LandingPage({ onNavigate }: LandingProps) {
                                 onClick={() => onNavigate('login')}
                                 className="glass-card px-8 py-4 rounded-xl font-bold text-lg text-white transition-all hover:bg-white/5 border-white/10 hover:border-vp-cyan/50 flex items-center justify-center gap-2 hover:shadow-[0_0_20px_rgba(255,255,255,0.05)]"
                             >
-                                دخول الباحثين
+                                {t('landing.btn_login')}
                             </button>
                         </div>
                     </div>
 
                     {/* Hero Visual Details - Floating Cards */}
-                    <div className="flex-1 relative w-full h-[400px] hidden md:block">
-                        <img src="/verdeplus cyan.png" alt="VerdePlus Logo" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] lg:w-[480px] object-contain drop-shadow-2xl z-20 opacity-90" />
+                    <div className="flex-1 relative w-full h-[300px] md:h-[400px] mt-10 md:mt-0">
+                        <img src="/verdeplus cyan.png" alt="VerdePlus Logo" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[250px] md:w-[350px] lg:w-[480px] object-contain drop-shadow-2xl z-20 opacity-90" />
 
                         {/* Floating Card 1 */}
-                        <div className="absolute top-10 right-10 glass-card p-4 rounded-2xl border-vp-cyan/30 shadow-glow-green animate-[fade-in_1s_ease-out_0.2s_both] hover:scale-105 transition-transform cursor-default z-30 backdrop-blur-md bg-vp-bg/60">
-                            <div className="flex items-center gap-3 mb-2">
-                                <div className="w-8 h-8 rounded-full bg-vp-cyan/20 flex items-center justify-center">
-                                    <span className="w-3 h-3 rounded-full bg-vp-cyan"></span>
+                        <div className="absolute top-5 md:top-10 right-0 md:right-10 glass-card p-3 md:p-4 rounded-xl border-vp-cyan/30 shadow-glow-green animate-[fade-in_1s_ease-out_0.2s_both] hover:scale-105 transition-transform cursor-default z-30 backdrop-blur-md bg-vp-bg/60 transform scale-90 md:scale-100 origin-top-right">
+                            <div className="flex items-center gap-2 md:gap-3 mb-2">
+                                <div className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-vp-cyan/20 flex items-center justify-center">
+                                    <span className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-vp-cyan"></span>
                                 </div>
                                 <div>
-                                    <p className="text-[10px] text-vp-muted uppercase tracking-wider">CH4 Levels</p>
-                                    <p className="font-bold font-mono text-white text-sm">2.1 ppm</p>
+                                    <p className="text-[9px] md:text-[10px] text-vp-muted uppercase tracking-wider">CH4 Levels</p>
+                                    <p className="font-bold font-mono text-white text-xs md:text-sm">2.1 ppm</p>
                                 </div>
                             </div>
-                            <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
+                            <div className="w-full bg-white/10 h-1 md:h-1.5 rounded-full overflow-hidden">
                                 <div className="bg-vp-cyan h-full w-[45%]"></div>
                             </div>
                         </div>
 
                         {/* Floating Card 2 */}
-                        <div className="absolute bottom-10 left-5 glass-card p-4 rounded-2xl border-vp-amber/30 shadow-glow-amber animate-[fade-in_1s_ease-out_0.5s_both] hover:scale-105 transition-transform cursor-default z-30 backdrop-blur-md bg-vp-bg/60">
-                            <div className="flex items-center gap-4">
+                        <div className="absolute bottom-5 md:bottom-10 left-0 md:left-5 glass-card p-3 md:p-4 rounded-xl border-vp-amber/30 shadow-glow-amber animate-[fade-in_1s_ease-out_0.5s_both] hover:scale-105 transition-transform cursor-default z-30 backdrop-blur-md bg-vp-bg/60 transform scale-90 md:scale-100 origin-bottom-left">
+                            <div className="flex items-center gap-3 md:gap-4">
                                 <div>
-                                    <p className="text-[10px] text-vp-muted uppercase tracking-wider mb-1">AQI Status</p>
-                                    <p className="font-bold text-white text-lg">Warning</p>
+                                    <p className="text-[9px] md:text-[10px] text-vp-muted uppercase tracking-wider mb-1">AQI Status</p>
+                                    <p className="font-bold text-white text-base md:text-lg">Warning</p>
                                 </div>
-                                <div className="text-3xl font-bold text-vp-amber leading-none">68</div>
+                                <div className="text-2xl md:text-3xl font-bold text-vp-amber leading-none">68</div>
                             </div>
                         </div>
 
                         {/* Floating Card 3 */}
-                        <div className="absolute top-1/2 -right-5 glass-card p-3 rounded-xl border-blue-500/30 animate-[fade-in_1s_ease-out_0.8s_both] hover:scale-105 transition-transform cursor-default z-10 backdrop-blur-md bg-vp-bg/40">
-                            <p className="text-[10px] text-vp-muted flex items-center gap-1"><span className="text-blue-400">●</span> 10 Active Zones</p>
+                        <div className="absolute top-1/2 -right-2 md:-right-5 glass-card p-2 md:p-3 rounded-lg border-blue-500/30 animate-[fade-in_1s_ease-out_0.8s_both] hover:scale-105 transition-transform cursor-default z-10 backdrop-blur-md bg-vp-bg/40">
+                            <p className="text-[9px] md:text-[10px] text-vp-muted flex items-center gap-1"><span className="text-blue-400">●</span> 10 Active Zones</p>
                         </div>
                     </div>
                 </div>
@@ -92,7 +92,7 @@ export default function LandingPage({ onNavigate }: LandingProps) {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-24 border-y border-white/5 py-8 animate-[fade-in_1s_ease-out_1s_both]">
                     {[
                         { label: 'مناطق الحرم', val: '10' },
-                        { label: 'أجهزة استشعار', val: '30+' },
+                        { label: 'أجهزة استشعار', val: '10+' },
                         { label: 'أنواع الغازات', val: '3' },
                         { label: 'دقة القراءة', val: '99.9%' },
                     ].map((s, i) => (

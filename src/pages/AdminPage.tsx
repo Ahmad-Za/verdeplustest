@@ -127,7 +127,7 @@ export default function AdminPage() {
     };
 
     return (
-        <div className="p-6 max-w-4xl mx-auto pb-24 animate-fade-in">
+        <div className="p-3 md:p-6 max-w-4xl mx-auto pb-24 animate-fade-in w-full max-w-[100vw] overflow-hidden">
             <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
                 <div>
                     <h2 className="text-2xl font-bold">إدخال البيانات اليدوي</h2>
@@ -151,21 +151,22 @@ export default function AdminPage() {
                 </div>
             )}
 
-            <div className="glass-card p-0 md:p-6 overflow-x-auto w-full">
-                <table ref={gridRef} className="w-full text-sm min-w-[700px]">
-                    <thead>
-                        <tr className="text-vp-muted border-b border-white/5 text-right">
-                            <th className="pb-3 font-medium pl-4">المنطقة</th>
-                            {GAS_KEYS.map(g => (
-                                <th key={g} className="pb-3 font-medium px-2">
-                                    {GAS_LABELS[g]}
-                                    <span className="text-vp-muted/50 text-xs font-normal ml-1">(ppm)</span>
-                                </th>
-                            ))}
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-white/[0.03]">
-                        {REGIONS.map((region, row) => (
+            <div className="glass-card p-3 md:p-6 w-full max-w-full overflow-hidden">
+                <div className="overflow-x-auto pb-4 w-full block max-w-full">
+                    <table ref={gridRef} className="w-full text-xs md:text-sm min-w-[500px] md:min-w-[700px] whitespace-nowrap">
+                        <thead>
+                            <tr className="text-vp-muted border-b border-white/5 text-right bg-black/30">
+                                <th className="pb-3 pt-3 font-medium pl-4 pr-3 border-l border-white/5">المنطقة</th>
+                                {GAS_KEYS.map(g => (
+                                    <th key={g} className="pb-3 pt-3 font-medium px-4 text-center">
+                                        {GAS_LABELS[g]}
+                                        <div className="text-vp-muted/50 text-xs font-normal mt-1">(ppm)</div>
+                                    </th>
+                                ))}
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-white/[0.03]">
+                            {REGIONS.map((region, row) => (
                             <tr key={region} className="hover:bg-white/[0.02] transition-colors">
                                 <td className="py-2.5 pl-4 font-medium text-sm whitespace-nowrap">{region}</td>
                                 {GAS_KEYS.map((gas, col) => (
@@ -185,10 +186,11 @@ export default function AdminPage() {
                                         />
                                     </td>
                                 ))}
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             {/* Legend */}

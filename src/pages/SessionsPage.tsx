@@ -14,7 +14,7 @@ export default function SessionsPage() {
     });
 
     return (
-        <div className="p-6 max-w-5xl mx-auto animate-fade-in">
+        <div className="p-3 md:p-6 max-w-5xl mx-auto animate-fade-in w-full max-w-[100vw] overflow-hidden">
             <h2 className="text-2xl font-bold mb-2">📚 مخرجات الجلسات الحوارية</h2>
             <p className="text-vp-muted text-sm mb-6">قاعدة بيانات مرجعية للتوصيات البيئية من جلسات الطلاب والباحثين</p>
 

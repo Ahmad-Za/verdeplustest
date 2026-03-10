@@ -17,23 +17,30 @@ export default function Footer() {
                 <div>
                     <h4 className="text-white font-semibold mb-4 text-sm tracking-widest">{t('nav.home')}</h4>
                     <ul className="space-y-2 text-sm">
-                        <li><a href="#" className="hover:text-vp-cyan transition-colors">{t('nav.insights')}</a></li>
-                        <li><a href="#" className="hover:text-vp-cyan transition-colors">{t('nav.logs')}</a></li>
-                        <li><a href="#" className="hover:text-vp-cyan transition-colors">{t('nav.sessions')}</a></li>
+                        <li><a href="#insights" className="hover:text-vp-cyan transition-colors">{t('nav.insights')}</a></li>
+                        <li><a href="#map" className="hover:text-vp-cyan transition-colors">{t('nav.map')}</a></li>
+                        <li><a href="#logs" className="hover:text-vp-cyan transition-colors">{t('nav.logs')}</a></li>
+                        <li><a href="#sessions" className="hover:text-vp-cyan transition-colors">{t('nav.sessions')}</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4 className="text-white font-semibold mb-4 text-sm tracking-widest">{t('footer.contact')}</h4>
                     <ul className="space-y-2 text-sm">
-                        <li><a href="#" className="hover:text-vp-cyan transition-colors">{t('footer.website')}</a></li>
-                        <li><a href="mailto:info@verde.edu" className="hover:text-vp-cyan transition-colors">info@verde.edu</a></li>
+                        <li><a href="mailto:pyplusplus@hotmail.com" className="hover:text-vp-cyan transition-colors">pyplusplus@hotmail.com</a></li>
+                        <li><a href="#" className="hover:text-vp-cyan transition-colors">الموقع الرسمي لفريق PyPlusPlus</a></li>
+                        <li><a href="#" className="hover:text-vp-cyan transition-colors">انضم لمهمتنا</a></li>
                     </ul>
                 </div>
             </div>
-            <div className="max-w-7xl mx-auto px-6 mt-12 pt-6 border-t border-white/10 flex flex-col md:flex-row items-center justify-between text-xs text-vp-muted/60 relative z-10">
-                <p>
-                    {t('footer.rights')} <span className="font-bold text-vp-cyan/80 tracking-wide">VERDEPLUS TEAM</span> &copy; 2026
-                </p>
+            <div className="max-w-7xl mx-auto px-6 mt-12 pt-6 border-t border-white/10 flex flex-col gap-4 md:flex-row items-center justify-between text-xs text-vp-muted/60 relative z-10">
+                <div className="flex flex-col gap-1 text-center md:text-right">
+                    <p>
+                        جميع الحقوق محفوظة لفريق PyPlusPlus &copy; 2026
+                    </p>
+                    <p className="font-bold text-vp-cyan/80 tracking-wide text-sm">
+                        مشروع VerdePlus: من حلب.. لكل سوريا.
+                    </p>
+                </div>
                 <div className="flex gap-4 mt-4 md:mt-0">
                     <a href="#" className="hover:text-vp-cyan transition-colors">Privacy</a>
                     <a href="#" className="hover:text-vp-cyan transition-colors">Terms</a>
