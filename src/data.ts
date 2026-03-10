@@ -59,7 +59,7 @@ export const SESSION_CARDS = [
     },
 ];
 
-export type UserRole = 'admin' | 'researcher' | null;
+export type UserRole = 'admin' | 'researcher' | 'visitor' | null;
 
 export const MOCK_USERS = [
     { email: "admin@verde.edu", password: "admin123", role: "admin" as UserRole, name: "أحمد المشرف" },

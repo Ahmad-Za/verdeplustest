@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { type UserRole, MOCK_USERS } from '../data';
 import { useI18n } from '../i18n';
-
+import { supabase } from '../supabase';
 interface LoginProps {
     onLogin: (role: UserRole, name: string) => void;
 }
@@ -16,19 +16,31 @@ export default function LoginPage({ onLogin }: LoginProps) {
         e.preventDefault();
         setError('');
         setLoading(true);
-        setTimeout(() => {
+        setTimeout(async () => {
             const user = MOCK_USERS.find(u => u.email === email);
             if (user) {
                 onLogin(user.role, user.name);
-            } else {
+                setLoading(false);
+                return;
+            }
+
+            try {
+                const { data } = await supabase
+                    .from('visitors')
+                    .select('email')
+                    .eq('email', email)
+                    .single();
+
+                if (data) {
+                    onLogin('researcher', 'باحث Premium');
+                } else {
+                    setError(t('login.error'));
+                }
+            } catch {
                 setError(t('login.error'));
             }
             setLoading(false);
         }, 800);
-    };
-
-    const fillHints = () => {
-        setEmail('admin@verde.edu');
     };
 
     return (
@@ -80,14 +92,6 @@ export default function LoginPage({ onLogin }: LoginProps) {
                         </button>
                     </form>
 
-                    {/* Hint */}
-                    <button
-                        type="button"
-                        onClick={fillHints}
-                        className="mt-4 w-full text-xs text-vp-muted/60 hover:text-vp-muted transition-colors flex items-center justify-center gap-1"
-                    >
-                        {t('login.hint')}
-                    </button>
                 </div>
 
                 {/* Premium promo card */}

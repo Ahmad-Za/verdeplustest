@@ -138,14 +138,7 @@ export default function LandingPage({ onNavigate }: LandingProps) {
                             <p className="text-sm text-vp-muted leading-relaxed">دعم تحقيق الحياد الكربوني ووضع الحلول الجذرية للمشاكل البيئية.</p>
                         </div>
 
-                        {/* Banner Feature */}
-                        <div className="md:col-span-3 glass-card p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 transition-all border-white/5 hover:bg-white/[0.03]">
-                            <div>
-                                <h3 className="text-lg font-bold mb-1">واجهة الباحثين المتقدمة (Premium)</h3>
-                                <p className="text-sm text-vp-muted">تصدير التقارير، تحليل الأنماط بالذكاء الاصطناعي، وتسجيل مخرجات الجلسات.</p>
-                            </div>
-                            <button className="secondary-btn text-sm px-4 py-2 whitespace-nowrap" onClick={() => onNavigate('login')}>تسجيل باحث</button>
-                        </div>
+
                     </div>
                 </div>
 
@@ -156,16 +149,18 @@ export default function LandingPage({ onNavigate }: LandingProps) {
                     <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-blue-500/20 rounded-full blur-3xl"></div>
 
                     <div className="relative z-10">
-                        <h2 className="text-3xl md:text-4xl font-bold mb-4">انضم إلى ثورة الاستدامة</h2>
+                        <h2 className="text-3xl md:text-4xl font-bold mb-4">التكنولوجيا من أجل بيئة مستدامة</h2>
                         <p className="text-vp-muted max-w-xl mx-auto mb-8 text-lg">
-                            اكتشف كيف يمكن للبيانات المتطورة أن تغير مستقبل بيئتنا الأكاديمية وتحقق مستقبلاً أنظف للجميع.
+                            نجمع بين أحدث التقنيات والبيانات الحية لبناء مستقبل بيئي ذكي، أنظف وأكثر استدامة.
                         </p>
-                        <button
-                            onClick={() => onNavigate('dashboard')}
-                            className="neon-btn px-8 py-4 text-lg rounded-xl"
+                        <a
+                            href="https://www.instagram.com/py.plus.plus/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="neon-btn px-8 py-4 text-lg rounded-xl inline-block"
                         >
-                            ابدأ الاستكشاف الآن
-                        </button>
+                            انضم الآن
+                        </a>
                     </div>
                 </div>
             </div>

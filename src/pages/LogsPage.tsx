@@ -35,19 +35,8 @@ export default function LogsPage({ role }: LogsProps) {
                 setAvailableDates(dates);
                 setLogs(data);
             } else {
-                // Mock historical data if DB table is empty or missing
-                const today = new Date().toISOString().split('T')[0];
-                const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
-                setAvailableDates([today, yesterday]);
-
-                // Create mock records for all 10 regions for 'today' and 'yesterday'
-                const mockLogs: any[] = [];
-                REGIONS.forEach((region, i) => {
-                    mockLogs.push({ date: today, region, ch4: 1.0 + (i * 0.2), c3h8: 0.5 + (i * 0.1), h2: 0.1 });
-                    mockLogs.push({ date: yesterday, region, ch4: 0.8 + (i * 0.2), c3h8: 0.4 + (i * 0.1), h2: 0.1 });
-                });
-
-                setLogs(mockLogs);
+                setAvailableDates([]);
+                setLogs([]);
             }
             setLoading(false);
         };
@@ -175,10 +164,26 @@ export default function LogsPage({ role }: LogsProps) {
                             </div>
 
                             {role === 'admin' || role === 'researcher' ? (
-                                <button onClick={handleExportCSV} className="w-full p-4 rounded-xl border border-white/5 bg-vp-cyan/10 hover:bg-vp-cyan/20 transition-colors text-sm font-semibold text-vp-cyan flex items-center justify-center gap-2">
-                                    <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-                                    تصدير تقرير اليوم (CSV)
-                                </button>
+                                <div className="flex flex-col gap-2 w-full">
+                                    <button onClick={handleExportCSV} className="w-full p-4 rounded-xl border border-white/5 bg-vp-cyan/10 hover:bg-vp-cyan/20 transition-colors text-sm font-semibold text-vp-cyan flex items-center justify-center gap-2">
+                                        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                                        تصدير تقرير اليوم (CSV)
+                                    </button>
+                                    <button onClick={() => {
+                                        let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+                                        csvContent += "Region,CH4,C3H8,H2\n";
+                                        const encodedUri = encodeURI(csvContent);
+                                        const link = document.createElement("a");
+                                        link.setAttribute("href", encodedUri);
+                                        link.setAttribute("download", `VerdePlus_Monthly_Report.csv`);
+                                        document.body.appendChild(link);
+                                        link.click();
+                                        document.body.removeChild(link);
+                                    }} className="w-full p-4 rounded-xl border border-white/5 bg-blue-500/10 hover:bg-blue-500/20 transition-colors text-sm font-semibold text-blue-400 flex items-center justify-center gap-2">
+                                        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                                        تصدير التقرير الشهري (CSV)
+                                    </button>
+                                </div>
                             ) : null}
                         </div>
                     )}

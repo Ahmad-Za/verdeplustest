@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { type UserRole, MOCK_READINGS, getStatus, overallAQI, REGIONS } from '../data';
+import { type UserRole, getStatus, overallAQI, REGIONS } from '../data';
 import { Sparkline } from '../components/Sparkline';
 import { useI18n } from '../i18n';
 import { supabase } from '../supabase';
@@ -11,7 +11,14 @@ interface DashboardProps {
 
 export default function DashboardPage({ onNavigate }: DashboardProps) {
     const { t, lang } = useI18n();
-    const [readings, setReadings] = useState(MOCK_READINGS);
+    const [readings, setReadings] = useState(REGIONS.map((region, id) => ({
+        id: id + 1,
+        date: '',
+        region,
+        ch4: 0,
+        c3h8: 0,
+        h2: 0
+    })));
 
     useEffect(() => {
         // Fetch initial data
@@ -23,7 +30,7 @@ export default function DashboardPage({ onNavigate }: DashboardProps) {
                     const row = data.find(d => d.region === region);
                     return {
                         id: id + 1,
-                        date: new Date().toISOString().split('T')[0], // Add missing date back for frontend typings
+                        date: row && row.updated_at ? row.updated_at.split('T')[0] : '', // Use actual DB date
                         region,
                         ch4: row ? parseFloat(row.ch4) : 0,
                         c3h8: row ? parseFloat(row.c3h8) : 0,
