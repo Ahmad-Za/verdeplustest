@@ -1,6 +1,31 @@
-# React + TypeScript + Vite
+# VerdePlus
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React + TypeScript + Vite application connected to Supabase.
+
+## Environment Setup
+
+This project requires Supabase credentials to run. The `.env` file is **not** committed to the repository for security reasons.
+
+### Local Development
+
+1. Copy the example environment file:
+   ```bash
+   cp .env.example .env
+   ```
+2. Fill in your Supabase project values in `.env`:
+   ```
+   VITE_SUPABASE_URL=https://<your-project-ref>.supabase.co
+   VITE_SUPABASE_ANON_KEY=<your-anon-key>
+   ```
+   You can find these values in your [Supabase dashboard](https://supabase.com/dashboard) under **Project Settings → API**.
+
+### Netlify Deployment
+
+Set the environment variables in the Netlify dashboard under **Site configuration → Environment variables**:
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_ANON_KEY`
+
+Netlify injects these at build time so the site works without a `.env` file in the repository.
 
 Currently, two official plugins are available:
 
